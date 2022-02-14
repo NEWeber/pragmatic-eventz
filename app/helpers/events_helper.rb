@@ -8,6 +8,6 @@ module EventsHelper
   end
 
   def day_and_time(event)
-    event.starts_at.strftime("%B %d at %I:%M %P")
+    event.starts_at.strftime("%B %d at %I:%M %P") rescue "No time"
   end
 end
