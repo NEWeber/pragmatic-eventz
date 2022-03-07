@@ -4,8 +4,14 @@ class SessionsController < ApplicationController
   end
 
   def create
-    # params[:email]
-    # params[:password]
+    user = User.find_by(email: params[:email])
+    if user && user.authenticate(params[:password])
+      session[:user_id] = user.id
+      redirect_to user, notice: "Weclome back, #{user.name}"
+    else
+      flash.now[:alert] = "Invalid email/password combination"
+      render :new
+    end
   end
 
   def destroy
