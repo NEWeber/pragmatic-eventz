@@ -13,7 +13,8 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      redirect_to @user, notice: "User created"
+      redirect_to @user, notice: "Thanks for signing up!"
+      session[:user_id] = @user.id
     else
       render :new
     end
@@ -26,7 +27,7 @@ class UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     if @user.update(user_params)
-      redirect_to @user, notice: "User updated"
+      redirect_to @user, notice: "Your account has been updated!"
     else
       render :edit
     end
