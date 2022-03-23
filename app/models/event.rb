@@ -1,11 +1,15 @@
 class Event < ApplicationRecord
+
+  before_save :set_slug
+
   has_many :registrations, dependent: :destroy
   has_many :likes, dependent: :destroy
   has_many :likers, through: :likes, source: :user
   has_many :categorizations, dependent: :destroy
   has_many :categories, through: :categorizations
 
-  validates :name, :location, presence: true
+  validates :name, presence: true, uniqueness: true
+  validates :location, presence: true
 
   validates :description, length: { minimum: 25 }
 
@@ -31,4 +35,13 @@ class Event < ApplicationRecord
   def sold_out?
     registrations.count >= capacity
   end
+
+  def to_param
+    slug
+  end
+
+  private
+    def set_slug
+      self.slug = name.parameterize
+    end
 end
