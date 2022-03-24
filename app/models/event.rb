@@ -10,6 +10,8 @@ class Event < ApplicationRecord
 
   has_one_attached :main_image
 
+  validate :acceptable_image
+
   validates :name, presence: true, uniqueness: true
   validates :location, presence: true
 
@@ -40,5 +42,18 @@ class Event < ApplicationRecord
   private
     def set_slug
       self.slug = name.parameterize
+    end
+
+    def acceptable_image
+      return unless main_image.attached?
+
+      unless main_image.blob.byte_size <= 1.megabyte
+        errors.add(:main_image, "is too big")
+      end
+
+      acceptable_types = ["image/jpeg", "image/png"]
+      unless acceptable_types.include?(main_image.content_type)
+        errors.add(:main_image, "image must be a jpeg or png")
+      end
     end
 end
