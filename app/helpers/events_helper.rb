@@ -10,4 +10,12 @@ module EventsHelper
   def day_and_time(event)
     event.starts_at.strftime("%B %d at %I:%M %P") rescue "No time"
   end
+
+  def main_image(event)
+    if event.main_image.attached?
+      image_tag event.main_image
+   else
+    image_tag "placeholder"
+    end
+  end
 end
